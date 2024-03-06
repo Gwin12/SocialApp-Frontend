@@ -13,8 +13,8 @@ function Main() {
     return (
         <>
             <Header />            
-            <HomeGuest/>
-            <Footer/>
+            <HomeGuest />
+            <Footer />
         </>
     )
 }

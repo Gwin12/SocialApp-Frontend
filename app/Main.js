@@ -1,20 +1,27 @@
 import React from "react";
-import ReactDOM  from "react-dom/client";
+import ReactDOM from "react-dom/client";
 const { useState, useEffect } = React
 
 
-function ExampleComponent(params) {
+// Components
+import Header from "./components/Header";
+import HomeGuest from "./components/HomeGuest";
+import Footer from "./components/Footer";
+
+
+function Main() {
     return (
-        <div>
-            <h2>My App</h2>
-            <p>This is my app</p>
-        </div>
+        <>
+            <Header />            
+            <HomeGuest/>
+            <Footer/>
+        </>
     )
 }
 
 
 const root = ReactDOM.createRoot(document.querySelector("#app"))
-root.render(<ExampleComponent />)
+root.render(<Main />)
 
 
 // Loading new changes on the fly

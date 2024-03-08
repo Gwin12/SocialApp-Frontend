@@ -9,8 +9,8 @@ function HeaderLoggedOut(props) {
     async function handleSubmit(e) {
         try {
             e.preventDefault()
-            const response = await Axios.post("http://localhost:8080/login", {username, password})
-            
+            const response = await Axios.post("/login", { username, password })
+
             if (response.data) {
                 localStorage.setItem("userData", JSON.stringify(response.data))
 

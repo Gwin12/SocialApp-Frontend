@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useContext } from "react"
 import Axios from "axios"
-import ExampleContext from "../ExampleContext";
-
+import DispatchContext from "../DIspatchContext"
 
 
 function HeaderLoggedOut(props) {
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
-    const { setLoggedIn } = useContext(ExampleContext)
+    const appDispatch = useContext(DispatchContext)
 
 
 
@@ -19,7 +18,7 @@ function HeaderLoggedOut(props) {
             if (response.data) {
                 localStorage.setItem("userData", JSON.stringify(response.data))
 
-                setLoggedIn(true)     // showing the logged in header
+                appDispatch({ type: "login"})
 
             } else {
                 console.log("Invalid username/password")

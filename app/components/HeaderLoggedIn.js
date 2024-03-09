@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import { Link } from "react-router-dom"
+import ExampleContext from "../ExampleContext";
+
 
 function HeaderLoggedIn(props) {
+    const { setLoggedIn } = useContext(ExampleContext)
     const { username, avatar } = JSON.parse(localStorage.getItem("userData"))
  
 
     function handleLoggedOut() {
-        props.setLoggedIn(false)
+        setLoggedIn(false)
         localStorage.removeItem("userData")
     }
 

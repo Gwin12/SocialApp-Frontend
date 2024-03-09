@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import Axios from "axios"
+import ExampleContext from "../ExampleContext";
+
+
 
 function HeaderLoggedOut(props) {
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
+    const { setLoggedIn } = useContext(ExampleContext)
+
 
 
     async function handleSubmit(e) {
@@ -14,7 +19,7 @@ function HeaderLoggedOut(props) {
             if (response.data) {
                 localStorage.setItem("userData", JSON.stringify(response.data))
 
-                props.setLoggedIn(true)     // showing the logged in header
+                setLoggedIn(true)     // showing the logged in header
 
             } else {
                 console.log("Invalid username/password")

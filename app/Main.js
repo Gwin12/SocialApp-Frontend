@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useReducer } from "react";
 import ReactDOM from "react-dom/client";
+import { useImmerReducer } from 'use-immer'    // Allows modifying of state data directly
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Axios from "axios";
-Axios.defaults.baseURL = "http://localhost:8080"; 
+Axios.defaults.baseURL = "http://localhost:8080";
 
 
 
@@ -32,22 +33,24 @@ function Main() {
 
 
     // using useReducer instead off states
-    function ourReducer(state, action) {
+    function ourReducer(draft, action) {
         switch (action.type) {
             case "login":
-                return { loggedIn: true, flashMessages: state.flashMessages }
+                draft.loggedIn = true
+                break
             case "logout":
-                return { loggedIn: false, flashMessages: state.flashMessages }
+                draft.loggedIn = false
+                break
             case "flashMessage":
-                return { loggedIn: state.loggedIn, flashMessages: state.flashMessages.concat(action.value) }
-
+                draft.flashMessages.push(action.value)
+                break
             default:
                 break;
         }
     }
 
 
-    const [state, dispatch] = useReducer(ourReducer, initialState)
+    const [state, dispatch] = useImmerReducer(ourReducer, initialState)
 
 
 

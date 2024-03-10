@@ -25,9 +25,11 @@ import FlashMessages from "./components/FlashMessages";
 
 
 function Main() {
+    const { token, username, avatar } = JSON.parse(localStorage.getItem("userData"))
     const initialState = {
         loggedIn: Boolean(localStorage.getItem("userData")),
-        flashMessages: []
+        flashMessages: [],
+        user: {token, username, avatar}
     }
 
 
@@ -37,6 +39,7 @@ function Main() {
         switch (action.type) {
             case "login":
                 draft.loggedIn = true
+                draft.user = action.userData
                 break
             case "logout":
                 draft.loggedIn = false
@@ -53,6 +56,15 @@ function Main() {
     const [state, dispatch] = useImmerReducer(ourReducer, initialState)
 
 
+    // adding userdata in local storage whenever they log in our out 
+    useEffect(() => {
+        if (state.loggedIn) {
+            localStorage.setItem("userData", JSON.stringify(state.user))
+        } else {
+            localStorage.removeItem("userData")
+        }
+
+    }, [state.loggedIn])
 
 
     return (

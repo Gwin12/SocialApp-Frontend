@@ -1,16 +1,15 @@
 import React, { useEffect, useState, useContext } from "react"
 import { Link } from "react-router-dom"
 import DispatchContext from "../DIspatchContext"
-
+import StateContext from "../StateContext"
 
 function HeaderLoggedIn(props) {
     const appDispatch = useContext(DispatchContext)
-    const { username, avatar } = JSON.parse(localStorage.getItem("userData"))
+    const appState = useContext(StateContext)
 
 
     function handleLoggedOut() {
         appDispatch({type: "logout"})
-        localStorage.removeItem("userData")
     }
 
     return (
@@ -23,7 +22,7 @@ function HeaderLoggedIn(props) {
                 <span className="chat-count-badge text-white"> </span>
             </span>
             <Link to="#" className="mr-2">
-                <img className="small-header-avatar" src={avatar} />
+                <img className="small-header-avatar" src={appState.user.avatar} />
             </Link>
             <Link className="btn btn-sm btn-success mr-2" to="/create-post">
                 Create Post

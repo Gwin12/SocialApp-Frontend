@@ -16,10 +16,7 @@ function HeaderLoggedOut(props) {
             const response = await Axios.post("/login", { username, password })
 
             if (response.data) {
-                localStorage.setItem("userData", JSON.stringify(response.data))
-
-                appDispatch({ type: "login"})
-
+                appDispatch({ type: "login", userData: response.data})   // saving user data in dispatch using useReducer
             } else {
                 console.log("Invalid username/password")
             }

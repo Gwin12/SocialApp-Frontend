@@ -9,7 +9,7 @@ import ProfilePosts from "./ProfilePosts"
 function Profile() {
     const { username } = useParams()
     const appState = useContext(StateContext)
-    const [ profileData, setProfileData ] = useState({
+    const [profileData, setProfileData] = useState({
         profileUsername: "...",
         profileAvatar: "https://gravatar.com/avatar/placeholder?s=128",
         isFollowing: false,
@@ -17,18 +17,25 @@ function Profile() {
     })
 
     useEffect(() => {
+        const ourRequest = Axios.CancelToken.source()
+
         async function fetchData() {
             try {
-                const response = await Axios.post(`/profile/${username}`, { token: appState.user.token })
-                
+                const response = await Axios.post(`/profile/${username}`, { token: appState.user.token }, { cancelToken: ourRequest.token })
+
                 setProfileData(response.data)
-                
+
             } catch (error) {
                 console.log(error)
             }
         }
 
         fetchData()
+
+        // Clean up function for when the component stops being rendered
+        return () => {
+            ourRequest.cancel()
+        }
 
     }, [])
 
@@ -53,7 +60,7 @@ function Profile() {
             </div>
 
             <ProfilePosts />
-            
+
         </Page>
     )
 }

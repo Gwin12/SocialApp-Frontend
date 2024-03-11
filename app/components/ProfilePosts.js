@@ -8,10 +8,14 @@ function ProfilePosts() {
     const [isLoading, setIsLoading] = useState(true)
     const [posts, setPosts] = useState([])
 
+
+
     useEffect(() => {
+        const ourRequest = Axios.CancelToken.source()
+
         async function fetchPosts() {
             try {
-                const response = await Axios.get(`/profile/${username}/posts`)
+                const response = await Axios.get(`/profile/${username}/posts`, {cancelToken: ourRequest.token})
 
                 setPosts(response.data)
                 setIsLoading(false)
@@ -22,6 +26,11 @@ function ProfilePosts() {
         }
 
         fetchPosts()
+
+        // Clean up function for when the component stops being rendered
+        return () => {
+            ourRequest.cancel()
+        }
 
     }, [])
 
@@ -35,7 +44,7 @@ function ProfilePosts() {
 
                 return (
                     <Link key={post._id} to={`/post/${post._id}`} className="list-group-item list-group-item-action">
-                        <img className="avatar-tiny" src={post.author.avatar} /> 
+                        <img className="avatar-tiny" src={post.author.avatar} />
                         <strong>{post.title}</strong> {" "}
                         <span className="text-muted small">on {dateFormatted} </span>
                     </Link>

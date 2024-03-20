@@ -4,6 +4,8 @@ import { useParams, Link } from "react-router-dom"
 import Axios from "axios"
 import LoadingDotsIcon from "./LoadingDotsIcon"
 import ReactMarkdown from "react-markdown"
+import { Tooltip as ReactToolTip } from "react-tooltip"
+
 
 
 function ViewSinglePost() {
@@ -47,8 +49,12 @@ function ViewSinglePost() {
       <div className="d-flex justify-content-between">
         <h2>{post.title}</h2>
         <span className="pt-2">
-          <Link href="#" className="text-primary mr-2" title="Edit"><i className="fas fa-edit"></i></Link>
-          <Link className="delete-post-button text-danger" title="Delete"><i className="fas fa-trash"></i></Link>
+          <Link to={`/post/${post._id}/edit`} data-tooltip-content="Edit" data-tooltip-id="edit" className="text-primary mr-2"><i className="fas fa-edit"></i></Link>
+          <ReactToolTip id="edit" className="custom-tooltip" />{" "}
+          
+          <Link data-tooltip-content="Delete" data-tooltip-id="delete" className="delete-post-button text-danger"><i className="fas fa-trash"></i></Link>
+          <ReactToolTip id="delete" className="custom-tooltip" />
+
         </span>
       </div>
 

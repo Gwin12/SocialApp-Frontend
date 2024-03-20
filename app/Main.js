@@ -22,15 +22,29 @@ import CreatePost from "./components/CreatePost";
 import ViewSinglePost from "./components/ViewSinglePost";
 import FlashMessages from "./components/FlashMessages";
 import Profile from "./components/Profile";
+import EditPost from "./components/EditPost";
 
 
 
 function Main() {
-    const { token, username, avatar } = JSON.parse(localStorage.getItem("userData"))
+    let username, token, avatar, userData;
+    userData = localStorage.getItem("userData")
+
+    if (userData) {
+        userData = JSON.parse(userData)
+        username = userData.username
+        token = userData.token
+        avatar = userData.avatar
+
+    } else {
+        username = '', token = '', avatar = ''
+    }
+
+
     const initialState = {
         loggedIn: Boolean(localStorage.getItem("userData")),
         flashMessages: [],
-        user: {token, username, avatar}
+        user: { token, username, avatar }
     }
 
 
@@ -80,6 +94,7 @@ function Main() {
                         <Route path="/profile/:username/*" element={<Profile />} />
                         <Route path="/create-post" element={<CreatePost />} />
                         <Route path="/post/:id" element={<ViewSinglePost />} />
+                        <Route path="/post/:id/edit" element={<EditPost />} />
                         <Route path="/about-us" element={<About />} />
                         <Route path="/terms" element={<Terms />} />
 

@@ -5,6 +5,7 @@ import Axios from "axios"
 import LoadingDotsIcon from "./LoadingDotsIcon"
 import ReactMarkdown from "react-markdown"
 import { Tooltip as ReactToolTip } from "react-tooltip"
+import PageNotFound from "./PageNotFound"
 
 
 
@@ -38,6 +39,9 @@ function ViewSinglePost() {
 
   }, [])
 
+
+
+  if (!isLoading && !post) return <Page title="404"><PageNotFound /></Page>   //if no post data was found
   if (isLoading) return <Page title="..."><LoadingDotsIcon /></Page>
 
 

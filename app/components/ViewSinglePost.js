@@ -41,7 +41,7 @@ function ViewSinglePost() {
       ourRequest.cancel()
     }
 
-  }, [])
+  }, [id])
 
 
 

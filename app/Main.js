@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { useImmerReducer } from 'use-immer'    // Allows modifying of state data directly
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Axios from "axios";
+import { CSSTransition } from "react-transition-group";
 Axios.defaults.baseURL = "http://localhost:8080";
 
 
@@ -24,6 +25,7 @@ import FlashMessages from "./components/FlashMessages";
 import Profile from "./components/Profile";
 import EditPost from "./components/EditPost";
 import PageNotFound from "./components/PageNotFound";
+import Search from "./components/Search";
 
 
 
@@ -45,7 +47,8 @@ function Main() {
     const initialState = {
         loggedIn: Boolean(localStorage.getItem("userData")),
         flashMessages: [],
-        user: { token, username, avatar }
+        user: { token, username, avatar },
+        isSearchOpen: false
     }
 
 
@@ -57,12 +60,23 @@ function Main() {
                 draft.loggedIn = true
                 draft.user = action.userData
                 break
+
             case "logout":
                 draft.loggedIn = false
                 break
+
             case "flashMessage":
                 draft.flashMessages.push(action.value)
                 break
+
+            case "openSearch":
+                draft.isSearchOpen = true
+                break
+
+            case "closeSearch":
+                draft.isSearchOpen = false
+                break
+
             default:
                 break;
         }
@@ -99,10 +113,13 @@ function Main() {
                         <Route path="/about-us" element={<About />} />
                         <Route path="/terms" element={<Terms />} />
                         <Route path="*" element={<PageNotFound />} />
-                        
 
                     </Routes>
                     <Footer />
+
+                    <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>
+                        <Search />
+                    </CSSTransition>
 
                 </BrowserRouter>
             </DispatchContext.Provider>

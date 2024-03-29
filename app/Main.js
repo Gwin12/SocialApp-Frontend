@@ -26,6 +26,7 @@ import Profile from "./components/Profile";
 import EditPost from "./components/EditPost";
 import PageNotFound from "./components/PageNotFound";
 import Search from "./components/Search";
+import Chat from "./components/Chat";
 
 
 
@@ -48,7 +49,9 @@ function Main() {
         loggedIn: Boolean(localStorage.getItem("userData")),
         flashMessages: [],
         user: { token, username, avatar },
-        isSearchOpen: false
+        isSearchOpen: false,
+        isChatOpen: false,
+        unReadChatCount: 0
     }
 
 
@@ -75,6 +78,22 @@ function Main() {
 
             case "closeSearch":
                 draft.isSearchOpen = false
+                break
+
+            case "toggleChat":
+                draft.isChatOpen = !draft.isChatOpen
+                break
+
+            case "closeChat":
+                draft.isChatOpen = false
+                break
+
+            case "incrementUnreadChatCount":
+                draft.unReadChatCount++ 
+                break
+
+            case "clearUnreadChatCount":
+                draft.unReadChatCount = 0
                 break
 
             default:
@@ -115,6 +134,8 @@ function Main() {
                         <Route path="*" element={<PageNotFound />} />
 
                     </Routes>
+
+                    <Chat />
                     <Footer />
 
                     <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>

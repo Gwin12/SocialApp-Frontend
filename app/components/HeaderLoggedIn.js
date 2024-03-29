@@ -10,13 +10,13 @@ function HeaderLoggedIn(props) {
 
 
     function handleLoggedOut() {
-        appDispatch({type: "logout"})
+        appDispatch({ type: "logout" })
     }
 
     function handleSearchIcon(e) {
         e.preventDefault()
 
-        appDispatch({type: "openSearch"})
+        appDispatch({ type: "openSearch" })
     }
 
     return (
@@ -27,9 +27,9 @@ function HeaderLoggedIn(props) {
 
             <ReactTooltip place="bottom" id="search" className="custom-tooltip" />
 
-            {" "}<span data-tooltip-id="chat" data-tooltip-content="Chat" className="mr-2 header-chat-icon text-white">
+            {" "}<span onClick={() => appDispatch({ type: "toggleChat" })} data-tooltip-id="chat" data-tooltip-content="Chat" className={"mr-2 header-chat-icon " + (appState.unReadChatCount ? "text-danger" : "text-white")}>
                 <i className="fas fa-comment"></i>
-                <span className="chat-count-badge text-white"> </span>
+                {appState.unReadChatCount ? <span className="chat-count-badge text-white">{appState.unReadChatCount < 10 ? appState.unReadChatCount : "9+"} </span> : ""}
             </span>
 
             <ReactTooltip place="bottom" id="chat" className="custom-tooltip" />

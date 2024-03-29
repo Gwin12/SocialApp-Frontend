@@ -89,7 +89,7 @@ function Main() {
                 break
 
             case "incrementUnreadChatCount":
-                draft.unReadChatCount++ 
+                draft.unReadChatCount++
                 break
 
             case "clearUnreadChatCount":
@@ -115,6 +115,32 @@ function Main() {
 
     }, [state.loggedIn])
 
+
+
+    // check if token has expired on first render
+    useEffect(() => {
+        if (state.loggedIn) {
+            const ourRequest = Axios.CancelToken.source()
+
+            async function fetchResult() {
+                try {
+                    const response = await Axios.post('/checkToken', { token: state.user.token }, { cancelToken: ourRequest.token })
+
+                    if (!response.data) {
+                        dispatch({type: 'logout'})
+                        dispatch({type: 'flashMessage', value: 'Your session has expired. Please login again.'})
+                    }
+
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+
+            fetchResult()
+            return () => ourRequest.cancel()
+        }
+
+    }, [])
 
     return (
         <StateContext.Provider value={state}>

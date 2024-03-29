@@ -23,7 +23,6 @@ function Chat() {
     useEffect(() => {
         if (appState.isChatOpen) {
             chatField.current.focus()
-
             appDispatch({type: "clearUnreadChatCount"})
         }
 

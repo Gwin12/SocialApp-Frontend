@@ -11,12 +11,14 @@ function HeaderLoggedIn(props) {
 
     function handleLoggedOut() {
         appDispatch({ type: "logout" })
+        appDispatch({ type: "flashMessage", value: "Log Out Successful" })
     }
 
     function handleSearchIcon(e) {
         e.preventDefault()
 
         appDispatch({ type: "openSearch" })
+        
     }
 
     return (

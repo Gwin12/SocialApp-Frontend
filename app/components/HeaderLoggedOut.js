@@ -8,7 +8,6 @@ function HeaderLoggedOut(props) {
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
     const appDispatch = useContext(DispatchContext)
-    // const navigate = useNavigate()
 
 
 
@@ -19,9 +18,11 @@ function HeaderLoggedOut(props) {
 
             if (response.data) {
                 appDispatch({ type: "login", userData: response.data})   // saving user data in dispatch using useReducer
-                // navigate(`/`)
+                appDispatch({ type: "flashMessage", value: "Login Successful"})   // saving user data in dispatch using useReducer
             } else {
                 console.log("Invalid username/password")
+                appDispatch({ type: "flashMessage", value: "Invalid username/password"})   // saving user data in dispatch using useReducer
+
             }
 
         } catch (error) {

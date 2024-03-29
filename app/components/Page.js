@@ -6,7 +6,7 @@ function Page(props) {
 
     // Setting title and scrolling to the top of the page once after this component has been rendered
     useEffect(() => {
-        document.title = `${props.title} | ComplexApp`
+        document.title = `${props.title} | SocialApp`
         window.scrollTo(0, 0)
     }, [props.title])
 

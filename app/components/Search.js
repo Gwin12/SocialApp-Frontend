@@ -3,6 +3,7 @@ import DispatchContext from "../DIspatchContext"
 import { useImmer } from "use-immer"
 import Axios from "axios"
 import { Link } from "react-router-dom"
+import Posts from "./Posts"
 
 
 function Search() {
@@ -117,16 +118,7 @@ function Search() {
 
 
                                 {state.results.map(post => {
-                                    const date = new Date(post.createdDate)
-                                    const dateFormatted = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-
-                                    return (
-                                        <Link onClick={() => appDispatch({ type: "closeSearch" })} key={post._id} to={`/post/${post._id}`} className="list-group-item list-group-item-action">
-                                            <img className="avatar-tiny" src={post.author.avatar} />
-                                            <strong>{post.title}</strong> {" "}
-                                            <span className="text-muted small">by {post.author.username} on {dateFormatted} </span>
-                                        </Link>
-                                    )
+                                    return <Posts post={post} key={post._id} onClick={() => appDispatch({ type: "closeSearch" })} />
                                 })}
 
                             </div>

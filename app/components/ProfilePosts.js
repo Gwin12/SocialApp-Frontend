@@ -9,7 +9,8 @@ function ProfilePosts() {
     const [posts, setPosts] = useState([])
 
 
-
+    
+    // fetching user profile posts when the profile url changes
     useEffect(() => {
         const ourRequest = Axios.CancelToken.source()
 
@@ -32,7 +33,7 @@ function ProfilePosts() {
             ourRequest.cancel()
         }
 
-    }, [])
+    }, [username])
 
     if (isLoading) return <div><LoadingDotsIcon /></div>
 

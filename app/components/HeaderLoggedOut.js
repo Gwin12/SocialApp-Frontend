@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useContext } from "react"
 import Axios from "axios"
 import DispatchContext from "../DIspatchContext"
+import { useNavigate } from "react-router-dom"
 
 
 function HeaderLoggedOut(props) {
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
     const appDispatch = useContext(DispatchContext)
+    // const navigate = useNavigate()
 
 
 
@@ -17,6 +19,7 @@ function HeaderLoggedOut(props) {
 
             if (response.data) {
                 appDispatch({ type: "login", userData: response.data})   // saving user data in dispatch using useReducer
+                // navigate(`/`)
             } else {
                 console.log("Invalid username/password")
             }

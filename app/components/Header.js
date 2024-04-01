@@ -8,6 +8,7 @@ import StateContext from "../StateContext";
 
 function Header(props) {
     const appState = useContext(StateContext)
+    const headerContent = appState.loggedIn ? <HeaderLoggedIn /> : <HeaderLoggedOut />
 
     return (
         <header className="header-bar bg-primary mb-3">
@@ -17,8 +18,8 @@ function Header(props) {
                         SocialApp
                     </Link>
                 </h4>
-                
-                {appState.loggedIn ? <HeaderLoggedIn /> : <HeaderLoggedOut />}
+
+                {!props.staticEmpty ? headerContent : ''}
 
             </div>
         </header>

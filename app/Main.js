@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { useImmerReducer } from 'use-immer'    // Allows modifying of state data directly
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Axios from "axios";
 import { CSSTransition } from "react-transition-group";
-Axios.defaults.baseURL = "http://localhost:8080";
+Axios.defaults.baseURL = process.env.BACKENDURL || "https://socialapp-rd5v.onrender.com";
 
 
 
@@ -19,14 +19,15 @@ import Footer from "./components/Footer";
 import About from "./components/About";
 import Terms from "./components/Terms";
 import Home from "./components/Home";
-import CreatePost from "./components/CreatePost";
-import ViewSinglePost from "./components/ViewSinglePost";
+const CreatePost = React.lazy(() => import('./components/CreatePost'))
+const ViewSinglePost = React.lazy(() => import('./components/ViewSinglePost'))
+const Search = React.lazy(() => import('./components/Search'))
+const Chat = React.lazy(() => import('./components/Chat'))
 import FlashMessages from "./components/FlashMessages";
 import Profile from "./components/Profile";
 import EditPost from "./components/EditPost";
 import PageNotFound from "./components/PageNotFound";
-import Search from "./components/Search";
-import Chat from "./components/Chat";
+import LoadingDotsIcon from "./components/LoadingDotsIcon";
 
 
 
@@ -127,8 +128,8 @@ function Main() {
                     const response = await Axios.post('/checkToken', { token: state.user.token }, { cancelToken: ourRequest.token })
 
                     if (!response.data) {
-                        dispatch({type: 'logout'})
-                        dispatch({type: 'flashMessage', value: 'Your session has expired. Please login again.'})
+                        dispatch({ type: 'logout' })
+                        dispatch({ type: 'flashMessage', value: 'Your session has expired. Please login again.' })
                     }
 
                 } catch (error) {
@@ -149,23 +150,33 @@ function Main() {
                     <FlashMessages messages={state.flashMessages} />
 
                     <Header />
-                    <Routes>
-                        <Route path="/" element={state.loggedIn ? <Home /> : <HomeGuest />} />
-                        <Route path="/profile/:username/*" element={<Profile />} />
-                        <Route path="/create-post" element={<CreatePost />} />
-                        <Route path="/post/:id" element={<ViewSinglePost />} />
-                        <Route path="/post/:id/edit" element={<EditPost />} />
-                        <Route path="/about-us" element={<About />} />
-                        <Route path="/terms" element={<Terms />} />
-                        <Route path="*" element={<PageNotFound />} />
+                    <Suspense fallback={<LoadingDotsIcon />}>
+                        <Routes>
+                            <Route path="/" element={state.loggedIn ? <Home /> : <HomeGuest />} />
+                            <Route path="/profile/:username/*" element={<Profile />} />
+                            <Route path="/create-post" element={<CreatePost />} />
+                            <Route path="/post/:id" element={<ViewSinglePost />} />
+                            <Route path="/post/:id/edit" element={<EditPost />} />
+                            <Route path="/about-us" element={<About />} />
+                            <Route path="/terms" element={<Terms />} />
+                            <Route path="*" element={<PageNotFound />} />
 
-                    </Routes>
+                        </Routes>
+                    </Suspense>
 
-                    <Chat />
+
+                    <Suspense fallback="">
+                        {state.loggedIn && <Chat />}
+                    </Suspense>
+
                     <Footer />
 
                     <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>
-                        <Search />
+                        <div className="search-overlay">
+                            <Suspense fallback="">
+                                <Search />
+                            </Suspense>
+                        </div>
                     </CSSTransition>
 
                 </BrowserRouter>

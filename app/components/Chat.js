@@ -4,11 +4,11 @@ import DispatchContext from "../DIspatchContext"
 import { useImmer } from "use-immer"
 import { io } from "socket.io-client"
 import { Link } from "react-router-dom"
-const socket = io("http://localhost:8080")
 
 
 
 function Chat() {
+    const socket = useRef(null)
     const chatField = useRef(null)
     const chatLog = useRef(null)
     const appState = useContext(StateContext)
@@ -23,7 +23,7 @@ function Chat() {
     useEffect(() => {
         if (appState.isChatOpen) {
             chatField.current.focus()
-            appDispatch({type: "clearUnreadChatCount"})
+            appDispatch({ type: "clearUnreadChatCount" })
         }
 
     }, [appState.isChatOpen])
@@ -31,11 +31,14 @@ function Chat() {
 
 
     useEffect(() => {
-        socket.on('chatFromServer', message => {
+        socket.current = io(process.env.BACKENDURL || "https://socialapp-rd5v.onrender.com")
+        socket.current.on('chatFromServer', message => {
             setState(draft => {
                 draft.chatMessages.push(message)
             })
         })
+
+        return () => socket.current.disconnect()
     }, [])
 
 
@@ -44,7 +47,7 @@ function Chat() {
         chatLog.current.scrollTop = chatLog.current.scrollHeight
 
         if (state.chatMessages && !appState.isChatOpen) {
-            appDispatch({type: "incrementUnreadChatCount"})
+            appDispatch({ type: "incrementUnreadChatCount" })
         }
 
     }, [state.chatMessages])
@@ -62,7 +65,7 @@ function Chat() {
         e.preventDefault()
 
         // send message to sever
-        socket.emit('chatFromBrowser', { message: state.fieldValue, token: appState.user.token })
+        socket.current.emit('chatFromBrowser', { message: state.fieldValue, token: appState.user.token })
 
 
         setState(draft => {

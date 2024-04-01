@@ -7,6 +7,7 @@ import ProfileFollowers from "./ProfileFollowers"
 import ProfileFollowing from "./ProfileFollowing"
 import Page from "./Page"
 import Axios from "axios"
+import PageNotFound from "./PageNotFound"
 
 
 function Profile() {
@@ -33,9 +34,14 @@ function Profile() {
         async function fetchData() {
             try {
                 const response = await Axios.post(`/profile/${username}`, { token: appState.user.token }, { cancelToken: ourRequest.token })
-                setState(draft => {
-                    draft.profileData = response.data
-                })
+
+                if (response.data) {
+                    setState(draft => {
+                        draft.profileData = response.data
+                    })
+                } else {
+                    return <Page title="404"><PageNotFound /></Page>
+                }
 
             } catch (error) {
                 console.log(error)

@@ -232,7 +232,6 @@ function HomeGuest() {
             }
 
             fetchResult()
-
             return () => ourRequest.cancel()
         }
 

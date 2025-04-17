@@ -29,7 +29,8 @@ function HomeGuest() {
             hasErrors: false,
             message: ''
         },
-        submitCount: 0
+        submitCount: 0,
+        isLoading: false
     }
 
 
@@ -113,18 +114,20 @@ function HomeGuest() {
                 break;
 
             case "passwordAfterDelay":
-                if (draft.password.value.length < 12) {
+                if (draft.password.value.length < 8) {
                     draft.password.hasErrors = true
-                    draft.password.message = "Password must be at least 12 characters long."
+                    draft.password.message = "Password must be at least 8 characters long."
                 }
 
                 break;
 
             case "submitForm":
-                if(!draft.username.hasErrors && draft.username.isUnique && !draft.email.hasErrors && draft.email.isUnique && !draft.password.hasErrors) {
+                if (!draft.username.hasErrors && draft.username.isUnique && !draft.email.hasErrors && draft.email.isUnique && !draft.password.hasErrors) {
                     draft.submitCount++
                 }
 
+            case "setLoading":
+                draft.isLoading = action.value
                 break;
 
             default:
@@ -219,12 +222,14 @@ function HomeGuest() {
 
             async function fetchResult() {
                 try {
-                    const response = await Axios.post('/register', { 
-                        username: state.username.value, email: state.email.value, password: state.password.value 
+                    const response = await Axios.post('/register', {
+                        username: state.username.value, email: state.email.value, password: state.password.value
                     }, { cancelToken: ourRequest.token })
 
-                    appDispatch({type: 'login', userData: response.data})
-                    appDispatch({type: 'flashMessage', value: 'Welcome to SocialApp'})
+                    appDispatch({ type: 'login', userData: response.data })
+                    appDispatch({ type: 'flashMessage', value: 'Welcome to SocialApp' })
+                    dispatch({ type: "setLoading", value: false })
+
 
                 } catch (error) {
                     console.log(error)
@@ -241,6 +246,7 @@ function HomeGuest() {
 
     function handleSubmit(e) {
         e.preventDefault()
+        dispatch({ type: "setLoading", value: true })
         dispatch({ type: 'usernameImmediately', value: state.username.value })
         dispatch({ type: 'usernameAfterDelay', value: state.username.value, noRequest: true })
         dispatch({ type: 'emailImmediately', value: state.email.value })
@@ -292,7 +298,7 @@ function HomeGuest() {
                             </CSSTransition>
 
                         </div>
-                        <button type="submit" className="py-3 mt-4 btn btn-lg btn-success btn-block">
+                        <button disabled={state.isLoading} type="submit" className="py-3 mt-4 btn btn-lg btn-success btn-block">
                             Sign up for SocialApp
                         </button>
                     </form>

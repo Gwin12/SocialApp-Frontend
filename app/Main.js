@@ -4,7 +4,7 @@ import { useImmerReducer } from 'use-immer'    // Allows modifying of state data
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Axios from "axios";
 import { CSSTransition } from "react-transition-group";
-Axios.defaults.baseURL = process.env.BACKENDURL || "https://socialapp-rd5v.onrender.com";
+Axios.defaults.baseURL = process.env.BACKENDURL || "https://social-app-backend-974x.onrender.com";
 
 
 
